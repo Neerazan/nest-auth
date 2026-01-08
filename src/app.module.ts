@@ -8,6 +8,7 @@ import { configs } from './config';
 import { DatabaseConfig } from './config/database.config';
 import { validationSchema } from './config/validation.schema';
 import { UsersModule } from './users/users.module';
+import { IamModule } from './iam/iam.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { UsersModule } from './users/users.module';
           type: 'postgres',
           host: db.host,
           port: db.port,
-          username: db.username,
+          username: db.user,
           password: db.password,
           database: db.name,
           synchronize: db.synchronize,
@@ -36,6 +37,7 @@ import { UsersModule } from './users/users.module';
     }),
     CoffeesModule,
     UsersModule,
+    IamModule,
   ],
   controllers: [AppController],
   providers: [AppService],
