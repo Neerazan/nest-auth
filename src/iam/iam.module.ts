@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { BcryptService } from './hashing/bcrypt.service';
-import { HashingService } from './hashing/hashing.service';
+import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import jwtConfig from 'src/config/jwt.config';
+import { User } from 'src/users/entities/user.entity';
 import { AuthenticationController } from './authentication/authentication.controller';
 import { AuthenticationService } from './authentication/authentication.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
-import jwtConfig from 'src/config/jwt.config';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule } from '@nestjs/config';
+import { AccessTokenGuard } from './authentication/guards/access-token.guard';
+import { BcryptService } from './hashing/bcrypt.service';
+import { HashingService } from './hashing/hashing.service';
 
 @Module({
   imports: [
@@ -18,7 +20,11 @@ import { ConfigModule } from '@nestjs/config';
   providers: [
     { provide: HashingService, useClass: BcryptService },
     AuthenticationService,
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    }
   ],
   controllers: [AuthenticationController],
 })
-export class IamModule {}
+export class IamModule { }

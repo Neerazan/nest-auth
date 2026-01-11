@@ -37,6 +37,9 @@ export class AuthenticationController {
     return {
       status: 'success',
       message: 'User logged in successfully.',
+      data: {
+        access_token: accessToken,
+      },
     }
   }
 }
