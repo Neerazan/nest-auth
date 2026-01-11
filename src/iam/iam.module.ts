@@ -10,6 +10,7 @@ import { AuthenticationService } from './authentication/authentication.service';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { BcryptService } from './hashing/bcrypt.service';
 import { HashingService } from './hashing/hashing.service';
+import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 
 @Module({
   imports: [
@@ -20,9 +21,10 @@ import { HashingService } from './hashing/hashing.service';
   providers: [
     { provide: HashingService, useClass: BcryptService },
     AuthenticationService,
+    AccessTokenGuard,
     {
       provide: APP_GUARD,
-      useClass: AccessTokenGuard,
+      useClass: AuthenticationGuard,
     }
   ],
   controllers: [AuthenticationController],
