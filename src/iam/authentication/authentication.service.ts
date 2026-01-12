@@ -17,7 +17,7 @@ import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-import { RefreshTokenIdsStorage } from './refresh-token-ids.storage';
+import { InvalidatedRefreshTokenError, RefreshTokenIdsStorage } from './refresh-token-ids.storage';
 
 @Injectable()
 export class AuthenticationService {
@@ -96,6 +96,10 @@ export class AuthenticationService {
 
       return this.generateTokens(user);
     } catch (error) {
+      if (error instanceof InvalidatedRefreshTokenError) {
+        // Take action: notify user that their refresh token might have been compromised.
+        throw new UnauthorizedException('Access denied.')
+      }
       throw new UnauthorizedException('Invalid refresh token.');
     }
   }
