@@ -8,9 +8,10 @@ import { User } from 'src/users/entities/user.entity';
 import { AuthenticationController } from './authentication/authentication.controller';
 import { AuthenticationService } from './authentication/authentication.service';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
+import { AuthenticationGuard } from './authentication/guards/authentication.guard';
+import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.storage';
 import { BcryptService } from './hashing/bcrypt.service';
 import { HashingService } from './hashing/hashing.service';
-import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthenticationGuard } from './authentication/guards/authentication.guar
     { provide: HashingService, useClass: BcryptService },
     AuthenticationService,
     AccessTokenGuard,
+    RefreshTokenIdsStorage,
     {
       provide: APP_GUARD,
       useClass: AuthenticationGuard,
